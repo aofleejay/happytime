@@ -11,6 +11,8 @@ class HappytimeController extends Controller
 {
     public function store(Request $request)
     {
-        return $request->all();
+        return view('store')
+                ->with('text', $request->input('text'))
+                ->with('user_name', $request->input('user_name'));
     }
 }

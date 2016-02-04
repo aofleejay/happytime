@@ -4,6 +4,6 @@
         
     </head>
     <body>
-        ece
+        วันนี้ {{$user_name}} รู้สึก : {{$text}}
     </body>
 </html>
