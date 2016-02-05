@@ -11,6 +11,22 @@ use Carbon\Carbon;
 
 class HappytimeController extends Controller
 {
+    public function index()
+    {
+        $ch = curl_init("https://hooks.slack.com/services/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");
+        $fp = fopen("log.txt", "w");
+
+        $postfields = 'payload={"channel":"#main","username":"happytime bot","text": "อย่าลืมใส่ happytime กันนะครับ"}';
+
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+    }
+
     public function store(Request $request)
     {
         $text = $request->input('text');

@@ -12,6 +12,7 @@
 */
 
 Route::post('/', 'HappytimeController@store');
+Route::get('/send', 'HappytimeController@index');
 
 /*
 |--------------------------------------------------------------------------
