@@ -24,9 +24,6 @@ class HappytimeController extends Controller
             $message = 'เรียบร้อยแจร้';
         }
 
-        return view('store')
-                ->with('text', $request->input('text'))
-                ->with('user_name', $request->input('user_name'))
-                ->with('message', $message);
+        return $message;
     }
 }
