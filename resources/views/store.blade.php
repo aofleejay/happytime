@@ -4,6 +4,7 @@
         
     </head>
     <body>
-        วันนี้ {{$user_name}} รู้สึก : {{$text}}
+        วันนี้ {{$user_name}} รู้สึก : {{$text}}<br>
+        {{$message}}
     </body>
 </html>
