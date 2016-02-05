@@ -15,9 +15,9 @@ class HappytimeController extends Controller
     {
         $found = Stat::where('user_id', $request->input('user_id'))
                     ->whereDate('created_at', '=', Carbon::today()->toDateString())
-                    ->get();
+                    ->first();
 
-        if ($found) {
+        if (isset($found)) {
             $message = 'วันนี้ส่งไปแล้วนะ';
         } else {
             Stat::create($request->all());
