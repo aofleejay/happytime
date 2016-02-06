@@ -3,55 +3,64 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\HappytimeRequest;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Stat;
+use App\Sprint;
 use Carbon\Carbon;
 
 class HappytimeController extends Controller
 {
-    // public function index()
-    // {
-    //     $ch = curl_init("https://hooks.slack.com/services/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");
-    //     $fp = fopen("log.txt", "w");
+    public function index(Request $request)
+    {
+        $startdate = Stat::dateFormat($request->input('startdate'));
+        $enddate = Stat::dateFormat($request->input('enddate'));
 
-    //     $postfields = 'payload={"channel":"#general","username":"happytime bot","text": "อย่าลืมใส่ happytime กันนะครับ"}';
+        // if (!empty($request->input('sprint'))) {
+        //     $sprint = Sprint::where('sprint', $request->input('sprint'))->first();
+        //     if (count($sprint)) {
+        //         $startdate = $sprint->start;
+        //         $enddate = $sprint->end;
+        //     }
+        // }
 
-    //     curl_setopt($ch, CURLOPT_FILE, $fp);
-    //     curl_setopt($ch, CURLOPT_POST, 1);
-    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+        $stat = Stat::orderBy('updated_at')
+                    ->whereDate('updated_at', '>=', $startdate)
+                    ->whereDate('updated_at', '<=', $enddate)
+                    ->get();
 
-    //     curl_exec($ch);
-    //     curl_close($ch);
-    //     fclose($fp);
-    // }
+        return view('report')->with('stat', $stat)
+                             ->with('startdate', $startdate)
+                             ->with('enddate', $enddate)
+                             ->with('sprint', $request->input('sprint'));
+    }
 
     public function store(Request $request)
     {
         $text = $request->input('text');
 
-        if ($text == 'list') {
-            $message = Stat::whereDate('created_at', '=', Carbon::today()->toDateString())
-                            ->lists('user_name');
-        } else {
-            if (empty($text)) {
-                $message = 'ใส่ 1 = sad, 2 = normal, 3 = happy ด้วยนะ';
-            } else if (!preg_match("/^[1-3]$/", $text)) {
-                $message = 'อย่าใส่มั่วซิจ๊ะ เดี๋ยวตบคว่ำเลย';
-            } else {
-                $found = Stat::where('user_id', $request->input('user_id'))
-                            ->whereDate('created_at', '=', Carbon::today()->toDateString())
-                            ->first();
+        $validator = \Validator::make(
+            ['text' => $text],
+            ['text' => 'required|in:1,2,3,list']
+        );
 
-                if (isset($found)) {
-                    $message = 'วันนี้ส่งไปแล้วนะ';
+        if (!$validator->fails()) {
+            if ($text == 'list') {
+                $response = Stat::ListSenderToday()->lists('user_name');
+            } else {
+                if (Stat::isTodaySend($request->input('user_id'))) {
+                    $response = "วันนี้คุณส่ง happytime ไปแล้วนะครับ";
                 } else {
                     Stat::create($request->all());
-                    $message = 'เรียบร้อยแจร้';
+                    $response = 'บันทึกเรียบร้อยครับ';
                 }
             }
+        } else {
+            $response = $validator->errors();
         }
-        return $message;
+
+        return $response;
     }
 }
