@@ -41,9 +41,15 @@ class HappytimeController extends Controller
     {
         $text = $request->input('text');
 
+        $messages = [
+            'in'       => "ค่า Happy มีค่าระหว่าง 1 - 3 นะครับ",
+            'required' => "อย่าลืมส่งค่า Happy มาด้วยนะครับ เช่น /Happytime 3",
+        ];
+
         $validator = \Validator::make(
             ['text' => $text],
-            ['text' => 'required|in:1,2,3,list']
+            ['text' => 'required|in:1,2,3,list'],
+            $messages
         );
 
         if (!$validator->fails()) {
