@@ -12,7 +12,6 @@
 */
 
 Route::post('/', 'HappytimeController@store');
-Route::get('/', 'HappytimeController@index');
 
 /*
 |--------------------------------------------------------------------------
