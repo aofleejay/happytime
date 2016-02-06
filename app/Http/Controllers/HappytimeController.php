@@ -64,7 +64,7 @@ class HappytimeController extends Controller
                 }
             }
         } else {
-            $response = $validator->errors()->all();
+            $response = $validator->errors()->all()[0];
         }
 
         return $response;
