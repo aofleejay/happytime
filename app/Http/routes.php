@@ -10,8 +10,8 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
-Route::get('/', 'HappytimeController@store');
+Route::get('/', 'HappytimeController@index');
+Route::post('/', 'HappytimeController@store');
 
 /*
 |--------------------------------------------------------------------------
