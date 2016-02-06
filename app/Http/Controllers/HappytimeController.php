@@ -13,10 +13,10 @@ class HappytimeController extends Controller
 {
     public function index()
     {
-        $ch = curl_init("https://hooks.slack.com/services/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");
+        $ch = curl_init("https://hooks.slack.com/services/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");
         $fp = fopen("log.txt", "w");
 
-        $postfields = 'payload={"channel":"#main","username":"happytime bot","text": "อย่าลืมใส่ happytime กันนะครับ"}';
+        $postfields = 'payload={"channel":"#general","username":"happytime bot","text": "อย่าลืมใส่ happytime กันนะครับ"}';
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_POST, 1);
