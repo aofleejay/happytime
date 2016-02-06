@@ -58,7 +58,7 @@ class HappytimeController extends Controller
                 }
             }
         } else {
-            $response = 'error krub';
+            $response = $validator->errors()->all();
         }
 
         return $response;
